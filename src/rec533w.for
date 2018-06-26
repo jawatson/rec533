@@ -1,8 +1,8 @@
 c###rec533.for
-      winapp 100000,160000
+c      winapp 100000,160000
       PROGRAM REC533w
 cccD    +               (filein,fileout,areach)
-      include <windows.ins>
+c      include <windows.ins>
       save
 c***********************************************************************
 c          Execute with:
@@ -183,7 +183,7 @@ C   COMMONS FROM FTZ CODE
       integer*4 window_handle,error_code
       integer*2 x_pos,y_pos,xsize,ysize,istat
       logical doesit*4,fexists@*4
-      real*8 start_time,end_time
+c      real*8 start_time,end_time
       common /crun_directory/ run_directory
          character run_directory*50
       common /cQUIET/ iquiet     !  =1=SILENT
@@ -195,12 +195,12 @@ C   COMMONS FROM FTZ CODE
       common /Ccancel_batch/ icancel_batch
       external cancel_batch
       character alf80*80
-      integer (kind=3) count_underflow
-      logical (kind=2) permission
+c      integer (kind=3) count_underflow
+c      logical (kind=2) permission
 C ---------------------------------------------------------------------
-      permission=.true.     !  ignore underflows
+c      permission=.true.     !  ignore underflows
 ccc      permission=.false.    !  track underflows
-      call permit_underflow@(permission)
+c      call permit_underflow@(permission)
 C ---------------------------------------------------------------------
 C.....START OF PROGRAM
       run=cmnam()
@@ -252,7 +252,7 @@ c******************************************************************
          if(filein.eq.' ') filein='default\def1.rec'
          call lcase(filein,40)
          if(filein(1:12).eq.'recareaw.cir') then    !  batch area coverage
-            call seconds_since_1980@(start_time)    !  use to calc time
+c            call seconds_since_1980@(start_time)    !  use to calc time
             iarea_batch=iarea_batch+1
             open(61,file=run_directory(1:nch_run)//'\'//filein,
      +              status='old',err=920)
@@ -263,9 +263,9 @@ c******************************************************************
 39          format(' BATCH area file(',i4,' of ',i4,'):',a)
             write(alf_narea_batch,'(i4)') narea_batch
             write(alf_iarea_batch,'(i4)') iarea_batch
-            call seconds_since_1980@(end_time)    !  use to calc time
-            elapsed=end_time-start_time
-            write(alf_elapsed_time,'(f8.1)') elapsed/60.
+c            call seconds_since_1980@(end_time)    !  use to calc time
+c            elapsed=end_time-start_time
+c            write(alf_elapsed_time,'(f8.1)') elapsed/60.
             k=winio@('%ca[Batch REC533 Area calculations progress]&')
             alf_fileout=' '
             k=winio@('fileout= %50st&',alf_fileout)
@@ -314,7 +314,7 @@ ccc            write(*,'('' istat='',i5,1h=,a)') istat,message
 ccc            write(*,'('' file='',a)') run_directory(1:nch_run)//
 ccc     +                                   '\'//fileout
 ccc         end if
-            
+
             write(alf_narea_batch,'(i4)') narea_batch
             write(alf_iarea_batch,'(i4)') iarea_batch
             alf_CIRAF='xxx of xxx'
@@ -452,7 +452,7 @@ C.....RETURN IF RUN OPTION IS .LE. 0
             call rdCIRAF911(cxlat,cxlon,npoints)  !  read 911 CIRAF test points
             idpoints=1
          end if
-            call seconds_since_1980@(start_time)    !  use to calc time
+c            call seconds_since_1980@(start_time)    !  use to calc time
 ccc         npoints=91
          n12=1                       !  only do 1 month/SSN
          igraph=0                    !  never graphs
@@ -783,14 +783,14 @@ c*****************************************************************
       end if
 c*****************************************************************
   260 CONTINUE
-  
+
 c*********************************************
 590   continue
       if(area.ne.'Z') then
          write(LUO,'(11h End-of-Run)')
       else
-         call seconds_since_1980@(end_time)    !  use to calc time
-         seconds=end_time-start_time
+c         call seconds_since_1980@(end_time)    !  use to calc time
+c         seconds=end_time-start_time
 ccc         open(62,file='rec533.tim')
 ccc         rewind(62)
 ccc         write(62,591) seconds
@@ -1041,11 +1041,11 @@ c***********************************************************************
          iarea_batch=iarea_batch+1
          write(*,39) iarea_batch,narea_batch,filein
          write(alf_iarea_batch,'(i4)') iarea_batch
-         call window_update@(alf_iarea_batch)
-         call seconds_since_1980@(end_time)    !  use to calc time
-         elapsed=end_time-start_time
-         write(alf_elapsed_time,'(f8.1)') elapsed/60.
-         call window_update@(alf_elapsed_time)
+c         call window_update@(alf_iarea_batch)
+c         call seconds_since_1980@(end_time)    !  use to calc time
+c         elapsed=end_time-start_time
+c         write(alf_elapsed_time,'(f8.1)') elapsed/60.
+c         call window_update@(alf_elapsed_time)
          fileout='recareax'
          call areamap(filein,fileout,area_meth)
          areach='A'
@@ -1060,10 +1060,10 @@ c***********************************************************************
             idone=idone-1            !  current one was not done
          end if
          iprocess_ctrl=0
-         call window_update@(iprocess_ctrl)    !  remove process message
-         call seconds_since_1980@(end_time)    !  use to calc time
-         elapsed=end_time-start_time
-         write(*,997) idone,elapsed/60.
+c         call window_update@(iprocess_ctrl)    !  remove process message
+c         call seconds_since_1980@(end_time)    !  use to calc time
+c         elapsed=end_time-start_time
+c         write(*,997) idone,elapsed/60.
 997      format(50(1h*),/,
      +          i5,' BATCH Area calculations done.',f10.1,' minutes',/,
      +          50(1h*))
@@ -1072,7 +1072,7 @@ c***********************************************************************
          iprocess_ctrl=0
          call window_update@(iprocess_ctrl)    !  remove process message
       end if
-      call underflow_count@(icount)
+c      call underflow_count@(icount)
 ccc      write(*,'(i5,''  underflows'')') icount
       if(area.ne.'B'.and.iarea_batch.eq.0)then!don't destroy BATCH output window
          if(iquiet.eq.0) then
@@ -1087,7 +1087,7 @@ ccc      write(*,'(i5,''  underflows'')') icount
          if(iabort.ne.0) write(*,998)
 998                      format(/,' Batch processing has been aborted.')
       end if
-      call underflow_count@(count_underflow)  !  see if any underflows occured
+c      call underflow_count@(count_underflow)  !  see if any underflows occured
 ccc      write(*,'(''underflow='',i8)') count_underflow
       END
 c--------------------------------------------------------------
