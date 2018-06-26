@@ -13,7 +13,7 @@ c                         = 's' = calculations & screen plot
 c**********************************************************
       common /crun_directory/ run_directory
          character run_directory*50
-      INCLUDE 'FICEAREA.hdr'
+      INCLUDE 'ficearea.hdr'
       character fileout*12,filename*30,ich,meth*1,model*6
       character grid_file*70
 ccc      character message*50
@@ -85,7 +85,7 @@ c          read COLOR & CITYNAME whether OLD or NEW format
      +          10x,9f7.3)
       else
          pause 'Model not ICEPAC, VOACAP or REC533 in AREAINP'
-         stop 
+         stop
       end if
       do 305 i=1,9     !  fix old integer months (before MONTH.DAY)
       if(montha(i).gt.0. .and. montha(i).lt.1.) montha(i)=montha(i)*100.
@@ -129,13 +129,17 @@ ccc      write(*,'('' erase:'',a)') grid_file
       call yieldit                       !  yield for windows control
       write(sufix,'(3h.da,i1)') ii
       call suffix(fileout,12,sufix,4)    !  append suffix
-      call erase@(fileout,error_code)    !  delete file first
+c      call erase@(fileout,error_code)    !  delete file first
+      call unlink(fileout, error_code)
+
       grid_file(nchg:nchg)=sufix(4:4)
-      call erase@(grid_file,error_code)
+c      call erase@(grid_file,error_code)
+      call unlink(grid_file, error_code)
+
 ccc      if(error_code.ne.0) then
 ccc         call dos_error_message@(error_code,message)
 ccc         nchm=lcount(message,50)
-ccc         write(*,'('' error_code='',i5,1h=,a,1h:,a)') 
+ccc         write(*,'('' error_code='',i5,1h=,a,1h:,a)')
 ccc     +      error_code,message(1:nchm),grid_file(1:nchg)
 ccc      end if
       if(ii.gt.nmonths) go to 500
@@ -322,7 +326,7 @@ c           get frequencies from areafreq.dat
       end
 * -------------------------------------------------------------------- *
       subroutine gettra(tlat,tlon,plat,plon)
-      INCLUDE 'FICEAREA.HDR'
+      INCLUDE 'ficearea.hdr'
       character cdeg*10
 
       cdeg=tlatdeg

@@ -3,6 +3,8 @@ c      winapp 100000,160000
       PROGRAM REC533w
 cccD    +               (filein,fileout,areach)
 c      include <windows.ins>
+      use voacapl_defs
+
       save
 c***********************************************************************
 c          Execute with:
@@ -182,7 +184,7 @@ C   COMMONS FROM FTZ CODE
       character cmnam*64,title*80,area_meth*1,alf*20,ich*1
       integer*4 window_handle,error_code
       integer*2 x_pos,y_pos,xsize,ysize,istat
-      logical doesit*4,fexists@*4
+      logical*1 doesit
 c      real*8 start_time,end_time
       common /crun_directory/ run_directory
          character run_directory*50
@@ -225,7 +227,7 @@ c****************************************************************
          x_pos=0
          y_pos=0
          window_handle=create_window(title,x_pos,y_pos,xsize,ysize)
-         ier= set_default_window@(window_handle)
+c         ier= set_default_window@(window_handle)
       end if
 c****************************************************************
       if(run(1:1).eq.' ') run='C:\ITSHFBC'
@@ -267,14 +269,12 @@ c            call seconds_since_1980@(end_time)    !  use to calc time
 c            elapsed=end_time-start_time
 c            write(alf_elapsed_time,'(f8.1)') elapsed/60.
 c            k=winio@('%ca[Batch REC533 Area calculations progress]&')
-            alf_fileout=' '
+c            alf_fileout=' '
 c            k=winio@('fileout= %50st&',alf_fileout)
-            alf_label=' '
+c            alf_label=' '
 c            k=winio@('%nl%80st&',alf_label)
-c            k=winio@('%nl%nl%cnCalculating file %tc[red]%4st %tc[black]'
-     +               //' of '//alf_narea_batch//'&',alf_iarea_batch)
-c            k=winio@('%nl%cnElapsed time: %tc[red]%8st %tc[black]'//
-     +               'minutes&',alf_elapsed_time)
+c            k=winio@('%nl%nl%cnCalculating file %tc[red]%4st %tc[black]'//' of '//alf_narea_batch//'&',alf_iarea_batch)
+c            k=winio@('%nl%cnElapsed time: %tc[red]%8st %tc[black]'//'minutes&',alf_elapsed_time)
             icancel_batch=0
 c            k=winio@('%nl%nl%cn%^bt[Cancel]&',cancel_batch)
 c            k=winio@('%lw',iprocess_ctrl)      !  leave window open
@@ -290,14 +290,14 @@ c            k=winio@('%lw',iprocess_ctrl)      !  leave window open
          fileout='rec533b.out'
          nch_out=lcount(fileout,64)
 c             !  delete any previous file
-         call erase@(run_directory(1:nch_run)//'\'//
-     +              fileout(1:nch_out),istat)
+c         call erase@(run_directory(1:nch_run)//'\'//fileout(1:nch_out),istat)
+         call unlink(trim(run_directory)//PATH_SEPARATOR//trim(fileout), istat)
+
          if(istat.ne.0 .and. iquiet.eq.0) then
             write(*,'('' run_dir='',a)') run_directory
-            call dos_error_message@(istat,message)
-ccc            write(*,'('' istat='',i5,1h=,a)') istat,message
-ccc            write(*,'('' file='',a)') run_directory(1:nch_run)//
-ccc     +                                   '\REC533B.OUT'
+c            call dos_error_message@(istat,message)
+            write(*,'('' istat='',i5,1h=,a)') istat,message
+            write(*,'('' file='',a)') run_directory(1:nch_run)//'\REC533B.OUT'
          end if
       else if(filein(1:6).eq.'ciraf ') then       !  CIRAF point-to-point
          areach='Z'
@@ -306,7 +306,9 @@ ccc     +                                   '\REC533B.OUT'
          if(filein(1:1).eq.' ') filein='rec533c.dat'
          if(fileout(1:1).eq.' ') fileout='rec533c.out'
 c             !  delete any previous file
-         call erase@(run_directory(1:nch_run)//'\'//fileout,istat)
+c         call erase@(run_directory(1:nch_run)//'\'//fileout,istat)
+         call unlink(trim(run_directory)//PATH_SEPARATOR//trim(fileout), istat)
+
 ccc         if(istat.ne.0) then
 ccc            write(*,'('' run_dir='',a)') run_directory
 ccc            call dos_error_message@(istat,message)
@@ -319,12 +321,11 @@ ccc         end if
             write(alf_iarea_batch,'(i4)') iarea_batch
             alf_CIRAF='xxx of xxx'
 c            k=winio@('%ca[REC533 CIRAF calculations progress]&')
-            alf_fileout=fileout
+c            alf_fileout=fileout
 c            k=winio@(alf_fileout//'&')
             alf_NAME=' '
 c            k=winio@('%nl%40st&',alf_NAME)
-c            k=winio@('%nl%nl%cnCalculating CIRAF points %tc[red]%10st'//
-     +               '%tc[black]&',alf_CIRAF)
+c            k=winio@('%nl%nl%cnCalculating CIRAF points %tc[red]%10st'//'%tc[black]&',alf_CIRAF)
             icancel_batch=0
 c            k=winio@('%nl%nl%cn%^bt[Cancel]&',cancel_batch)
 c            k=winio@('%lw',iprocess_ctrl)      !  leave window open
@@ -333,7 +334,9 @@ c            k=winio@('%lw',iprocess_ctrl)      !  leave window open
          ndistance=51                          !  plot vs distance
          open(48,file=run_directory(1:nch_run)//'\REC533D.IDX')
          rewind(48)
-         call erase@(run_directory(1:nch_run)//'\REC533D.DST',istat)
+c         call erase@(run_directory(1:nch_run)//'\REC533D.DST',istat)
+         call unlink(trim(run_directory)//PATH_SEPARATOR//'rec533d.dst', istat)
+
          open(49,file=run_directory(1:nch_run)//'\REC533D.DST',
      +        access='direct',form='unformatted',recl=108)
          fileout='rec533d.out'
@@ -341,7 +344,9 @@ c            k=winio@('%lw',iprocess_ctrl)      !  leave window open
          ntime=1                               !  plot vs time
          open(48,file=run_directory(1:nch_run)//'\REC533T.IDX')
          rewind(48)
-         call erase@(run_directory(1:nch_run)//'\REC533T.DST',istat)
+c         call erase@(run_directory(1:nch_run)//'\REC533T.DST',istat)
+         call unlink(trim(run_directory)//PATH_SEPARATOR//'rec533d.dst', istat)
+
          open(49,file=run_directory(1:nch_run)//'\REC533T.DST',
      +        access='direct',form='unformatted',recl=96)
          fileout='rec533t.out'
@@ -391,8 +396,9 @@ C.....OPEN FILE FOR SUPPLEMENTARY OUTPUT TO VDU
       ICON=0
 c****************************************************************
 50    nch_inp=lcount(filein,40)
-      doesit=fexists@(
-     +   run_directory(1:nch_run)//'\'//filein(1:nch_inp),error_code)
+c      doesit=fexists@(run_directory(1:nch_run)//'\'//filein(1:nch_inp),error_code)
+      inquire(file=trim(run_directory)//PATH_SEPARATOR//trim(filein),exist=doesit)
+
       if(.NOT.doesit) go to 950      !  if it does not exist, quit
       call antcalc(filein,area)
 c****************************************************************
@@ -403,17 +409,15 @@ c****************************************************************
       OPEN(LUI,FILE=run_directory(1:nch_run)//'\'//filein(1:nch_inp),
      +     STATUS='OLD',FORM='FORMATTED',err=900)
       nch_fot=lcount(fileout,40)
-      if(fileout(1:11).eq.'REC533B.OUT' .or.
-     +   fileout(1:11).eq.'rec533b.out') then     !  batch, use APPEND
-         OPEN(LUO,file=run_directory(1:nch_run)//'\'//
-     +        fileout(1:nch_fot),
-     +        status='APPEND')
+      if(fileout(1:11).eq.'REC533B.OUT' .or. fileout(1:11).eq.'rec533b.out') then     !  batch, use APPEND
+c         OPEN(LUO,file=run_directory(1:nch_run)//'\'//fileout(1:nch_fot),status='APPEND')
+         OPEN(LUO,file=run_directory(1:nch_run)//'\'//fileout(1:nch_fot),access='APPEND')
       else if(fileout(1:2).eq.'..') then
          write(*,'('' Area fileout='',a)')
      +                 run_directory(1:nch_run-3)//fileout(4:nch_fot)
          if(iarea_batch.ne.0) then
             alf_fileout='..\'//fileout(4:nch_fot)
-            call window_update@(alf_fileout)
+c            call window_update@(alf_fileout)
          end if
          OPEN(LUO,file=run_directory(1:nch_run-3)//fileout(4:nch_fot))
          rewind(LUO)
@@ -516,15 +520,16 @@ C.....COUNT OF FREQUENCIES KOF
          else
             write(alf_NAME,'(5a4,i8,12h frequencies)') ITRANS,kof
          end if
-         call window_update@(alf_NAME)
+c         call window_update@(alf_NAME)
       end if
       if(iciraf_flag.ne.0 .and. mod(ipoint,10).eq.0) then
          write(alf_CIRAF,'(i3,4h of ,i3)') ipoint,npoints
-         call window_update@(alf_CIRAF)
+c         call window_update@(alf_CIRAF)
       end if
       if(mod(ipoint,100).eq.0 .and. iquiet.eq.0) then
          write(alf4,'(i4)') ipoint
-         call soua@(alf4)
+c         call soua@(alf4)
+         write(*, alf4)
       end if
 
       if(npoints.gt.1) then      !  set CIRAF test points
@@ -547,10 +552,13 @@ ccc      rlong=rlongd*d2r
          if(mod(idistance-1,5).eq.0) then
             if(idistance.eq.1) then
                write(*,'('' Calculating Distance plot'')')
-               call soua@(' Dist/51[')
+c               call soua@(' Dist/51[')
+               write(*,'(''  Dist/51['')', advance='no')
             end if
             write(alf4,'(i3)') idistance
-            call soua@(alf4)
+c            call soua@(alf4)
+            write(*,alf4, advance='no')
+
          end if
       end if
 ccc      if(idistance.eq.1) then
@@ -571,11 +579,13 @@ ccc         write(luo,'(''after distxy, rlongd='',f8.3)') rlongd
 ccc      end if
 c***************************************************************
 c          check to see if we should abort processing
-      doesit=fexists@(
-     +       run_directory(1:nch_run)//'\'//'rec533.abt',error_code)
+c      doesit=fexists@(run_directory(1:nch_run)//'\'//'rec533.abt',error_code)
+      inquire(file=trim(run_directory)//PATH_SEPARATOR//'rec533.abt', exist=doesit)
+
       if(doesit) then     !  file exists, abort processing
-         call erase@(run_directory(1:nch_run)//'\'//'rec533.abt',
-     +                         istat)   !  delete file first
+c         call erase@(run_directory(1:nch_run)//'\'//'rec533.abt',istat)   !  delete file first
+         call unlink(trim(run_directory)//PATH_SEPARATOR//'rec533.abt', istat)
+
          iabort=1         !  indicate we have aborted batch processing
          go to 999        !  quit processing
       end if
@@ -826,16 +836,22 @@ c********************************************************************
       else
          write(alf,'(i3)') iy
       end if
-      call soua@(alf)
+c      call soua@(alf)
+      write(*, alf, advance='no')
       if(mod(iy,20).eq.0) then
-         call sou@(' ')            !  cause a <new line>
-         call coua@('        ')    !  space over to line things up
+c         call sou@(' ')            !  cause a <new line>
+c         call coua@('        ')    !  space over to line things up
+        write(*,'(A)') NEW_LINE('A')
+        write(*, '(        )', advance='no')
       end if
 c          check to see if we should abort processing
-      doesit=fexists@(
-     +   run_directory(1:nch_run)//'\recarea.abt',error_code)
+c      doesit=fexists@(run_directory(1:nch_run)//'\recarea.abt',error_code)
+      inquire(file=trim(run_directory)//PATH_SEPARATOR//'recarea.abt',exist=doesit)
+
       if(doesit) then     !  file exists, abort processing
-         call erase@('recarea.abt',istat)   !  delete file first
+c         call erase@('recarea.abt',istat)   !  delete file first
+         call unlink('recarea.abt', istat)
+
          iabort=1         !  indicate we have aborted batch processing
          go to 999        !  quit processing
       end if
@@ -976,7 +992,8 @@ ccc      write(61,'('' xpwr,sfa,sn1='',4f10.4)') xpwr,sfa,sn1,freq
      +             XDBU(IT,JF),SNA(IT,JF),PSN(IT,JF),SNAxx(IT,JF))
 c*********************************************
 1900  CONTINUE
-      call sou@(']')
+c      call sou@(']')
+      write(*, '('']'')', advance='no')
 c*****************************************************************
 C.....END OF RUN
   600 CONTINUE
@@ -1070,23 +1087,23 @@ c         write(*,997) idone,elapsed/60.
       end if
       if(iciraf_flag.ne.0) then      !  CIRAF finish
          iprocess_ctrl=0
-         call window_update@(iprocess_ctrl)    !  remove process message
+c         call window_update@(iprocess_ctrl)    !  remove process message
       end if
 c      call underflow_count@(icount)
 ccc      write(*,'(i5,''  underflows'')') icount
-      if(area.ne.'B'.and.iarea_batch.eq.0)then!don't destroy BATCH output window
-         if(iquiet.eq.0) then
-            call destroy_window(window_handle)
-         else
-            if(icount.ne.0) then
-               window_handle=get_default_window@()
-               call destroy_window(window_handle)
-            end if
-         end if
-      else
-         if(iabort.ne.0) write(*,998)
-998                      format(/,' Batch processing has been aborted.')
-      end if
+c      if(area.ne.'B'.and.iarea_batch.eq.0)then!don't destroy BATCH output window
+c         if(iquiet.eq.0) then
+c            call destroy_window(window_handle)
+c         else
+c            if(icount.ne.0) then
+c               window_handle=get_default_window@()
+c               call destroy_window(window_handle)
+c            end if
+c         end if
+c      else
+c         if(iabort.ne.0) write(*,998)
+c998                      format(/,' Batch processing has been aborted.')
+c      end if
 c      call underflow_count@(count_underflow)  !  see if any underflows occured
 ccc      write(*,'(''underflow='',i8)') count_underflow
       END

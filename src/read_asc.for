@@ -1,8 +1,8 @@
       subroutine read_asc(model,*)       !  read common from modelW.ASC
       character model*6
 
-      INCLUDE 'FICEPAC.hdr'
-      INCLUDE 'FICE_SSN.hdr'
+      INCLUDE 'ficepac.hdr'
+      INCLUDE 'fice_ssn.hdr'
       common /cbotlines/ nbotlines,linesbot(14)
       common /ctoplines/ ntoplines,linestop( 7)
       common /zMETHOD/ kmeth     !  propagation method used for method=23
@@ -38,7 +38,7 @@ c**********************************************************************
 8     format(a,1x ,a,2f10.5)
       read (29,2,err=900) numants,Index_ant
       do 10 i=1,numants
-       read (29,9,err=900) 
+       read (29,9,err=900)
      +            minfreq(i),maxfreq(i),design_freq(i),xmtr_dir(i),
      +            xmtr_file(i),xmtr_model(i),beam_main(i),TxPower(i)
 9     format(2i5,f10.5,1x,a,1x ,a,1x ,a,f10.5,f20.10)

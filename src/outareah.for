@@ -47,7 +47,7 @@ c         get slew angle for HFCC antennas
       else
          mainbeam=nint(beammain(itr))+islew       !  add slew back in
          if(mainbeam.lt.0.) mainbeam=mainbeam+360
-         write(antbear,'(1h(,i3,1h,,i3,4h)deg)') mainbeam,islew 
+         write(antbear,'(1h(,i3,1h,,i3,4h)deg)') mainbeam,islew
       end if
 c**********************************************************
       write(label,101) ITRANS,antname(itr)(1:10),alfPwr(1:nchp),
@@ -66,13 +66,13 @@ c**********************************************************
       END
 C--------------------------------
       subroutine progress_label(label)
-      include <windows.ins>
+c      include <windows.ins>
       character label*(*)
       common /Cprogress/ iarea_batch,alf_label
          character alf_label*80
       if(iarea_batch.eq.0) return
       alf_label=label
-      call window_update@(alf_label)
+c      call window_update@(alf_label)
       RETURN
       END
 C---------------------------------

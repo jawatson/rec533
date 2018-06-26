@@ -8,7 +8,7 @@ c          * = alternate return when done or if error occurs
 c**************************************************************************
          character model*6,filein*(*)
 
-      INCLUDE 'FICEPAC.hdr'
+      INCLUDE 'ficepac.hdr'
       character path*5,antenna(5)*63
       character tlatns*1,tlonew*1,rlatns*1,rlonew*1
 c**********************************************************************

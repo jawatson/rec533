@@ -1,5 +1,5 @@
       subroutine getTR(tlat,tlon,rlat,rlon)
-      INCLUDE 'FICEPAC.HDR'
+      INCLUDE 'ficepac.hdr'
       character cdeg*10
 
       cdeg=tlatdeg
