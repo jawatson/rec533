@@ -266,18 +266,18 @@ c            call seconds_since_1980@(start_time)    !  use to calc time
 c            call seconds_since_1980@(end_time)    !  use to calc time
 c            elapsed=end_time-start_time
 c            write(alf_elapsed_time,'(f8.1)') elapsed/60.
-            k=winio@('%ca[Batch REC533 Area calculations progress]&')
+c            k=winio@('%ca[Batch REC533 Area calculations progress]&')
             alf_fileout=' '
-            k=winio@('fileout= %50st&',alf_fileout)
+c            k=winio@('fileout= %50st&',alf_fileout)
             alf_label=' '
-            k=winio@('%nl%80st&',alf_label)
-            k=winio@('%nl%nl%cnCalculating file %tc[red]%4st %tc[black]'
+c            k=winio@('%nl%80st&',alf_label)
+c            k=winio@('%nl%nl%cnCalculating file %tc[red]%4st %tc[black]'
      +               //' of '//alf_narea_batch//'&',alf_iarea_batch)
-            k=winio@('%nl%cnElapsed time: %tc[red]%8st %tc[black]'//
+c            k=winio@('%nl%cnElapsed time: %tc[red]%8st %tc[black]'//
      +               'minutes&',alf_elapsed_time)
             icancel_batch=0
-            k=winio@('%nl%nl%cn%^bt[Cancel]&',cancel_batch)
-            k=winio@('%lw',iprocess_ctrl)      !  leave window open
+c            k=winio@('%nl%nl%cn%^bt[Cancel]&',cancel_batch)
+c            k=winio@('%lw',iprocess_ctrl)      !  leave window open
          end if
          fileout='recareax'
          call areamap(filein,fileout,area_meth)
@@ -318,16 +318,16 @@ ccc         end if
             write(alf_narea_batch,'(i4)') narea_batch
             write(alf_iarea_batch,'(i4)') iarea_batch
             alf_CIRAF='xxx of xxx'
-            k=winio@('%ca[REC533 CIRAF calculations progress]&')
+c            k=winio@('%ca[REC533 CIRAF calculations progress]&')
             alf_fileout=fileout
-            k=winio@(alf_fileout//'&')
+c            k=winio@(alf_fileout//'&')
             alf_NAME=' '
-            k=winio@('%nl%40st&',alf_NAME)
-            k=winio@('%nl%nl%cnCalculating CIRAF points %tc[red]%10st'//
+c            k=winio@('%nl%40st&',alf_NAME)
+c            k=winio@('%nl%nl%cnCalculating CIRAF points %tc[red]%10st'//
      +               '%tc[black]&',alf_CIRAF)
             icancel_batch=0
-            k=winio@('%nl%nl%cn%^bt[Cancel]&',cancel_batch)
-            k=winio@('%lw',iprocess_ctrl)      !  leave window open
+c            k=winio@('%nl%nl%cn%^bt[Cancel]&',cancel_batch)
+c            k=winio@('%lw',iprocess_ctrl)      !  leave window open
             iciraf_flag=1
       else if(filein(1:11).eq.'rec533d.dat') then
          ndistance=51                          !  plot vs distance
